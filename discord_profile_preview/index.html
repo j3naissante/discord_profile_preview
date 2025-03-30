@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Picture and Banner Editor</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h2>Discord Profile Preview</h2>
+    
+    <div class="profile-container">
+        <div class="banner" id="banner"></div>
+        <div class="avatar" id="avatar"></div>
+    </div>
+
+    <div class="upload-buttons">
+        <label class="custom-file-upload">
+            <input type="file" id="avatarUpload" accept="image/*"> 📷 Upload Profile Picture
+        </label>
+        
+        <label class="custom-file-upload">
+            <input type="file" id="bannerUpload" accept="image/*"> 🖼️ Upload Banner
+        </label>
+    </div>
+
+    <div>
+        <label for="themeColor">Theme Color:</label>
+        <input type="color" id="themeColor" value="#5865F2">
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">Adjust Your Image</div>
+            <div>
+                <img id="imageToEdit" style="max-width: 100%;" />
+            </div>
+            <div class="modal-footer">
+                <button class="apply-btn" id="applyChanges">Apply Changes</button>
+                <button class="close-btn" id="closeModal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
