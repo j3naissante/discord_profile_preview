@@ -1,118 +1,37 @@
-const avatarUpload = document.getElementById("avatarUpload");
-const bannerUpload = document.getElementById("bannerUpload");
-const avatarContainer = document.getElementById("avatar");
-const bannerContainer = document.getElementById("banner");
-const modal = document.getElementById("modal");
-const imageToEdit = document.getElementById("imageToEdit");
-const closeModal = document.getElementById("closeModal");
-const applyChanges = document.getElementById("applyChanges");
-const themeColorInput = document.getElementById("themeColor");
-
-let cropper;
-let currentImageType = '';
-
-// Function to initialize the cropper for the uploaded image
-function initializeCropper(image, aspectRatio, isBanner = false) {
-    cropper = new Cropper(image, {
-        aspectRatio: aspectRatio, // Square for avatar, free for banner
-        viewMode: 1, // Restrict the image to the canvas size
-        autoCropArea: 0.8, // Allow a larger crop area
-        zoomable: true, // Allow zooming
-        scalable: true, // Allow resizing
-        cropBoxMovable: true, // Allow moving the crop box
-        cropBoxResizable: true, // Allow resizing the crop box
-        ready: function () {
-            if (currentImageType === 'avatar') {
-                const cropperElement = this.cropper.container;
-                cropperElement.querySelector('.cropper-face').style.borderRadius = '50%';
-                cropperElement.querySelector('.cropper-view-box').style.borderRadius = '50%';
-            }
-
-            if (isBanner) {
-                const cropperElement = this.cropper.container;
-                cropperElement.querySelector('.cropper-face').style.borderRadius = '0';
-                cropperElement.querySelector('.cropper-view-box').style.borderRadius = '0';
-            }
-        }
-    });
+function toggleEdit() {
+  const form = document.getElementById('edit-form');
+  if (form.style.display !== 'flex') {
+    form.style.display = 'flex';
+  }
 }
 
-// Function to apply the theme color to the profile container
-function updateThemeColor(color) {
-    document.documentElement.style.setProperty("--theme-color", color);  // Update theme color globally
-    avatarContainer.style.borderColor = color;  // Avatar container border color
-    avatarContainer.style.border = `4px solid ${color}`;  // Avatar border color
-    bannerContainer.style.borderColor = color;  // Banner container border color
-
-    // Ensure buttons don't get affected by this color (keep the default button color)
-    // You can separately adjust button colors using a different variable or just leave them as-is
+function updateImage(event, type) {
+  const file = event.target.files[0];
+  if (file) {
+    const url = URL.createObjectURL(file);
+    document.getElementById(type).style.backgroundImage = `url('${url}')`;
+  }
 }
 
-// Open the modal when the user uploads a profile picture
-avatarUpload.addEventListener("change", function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            if (cropper) {
-                cropper.destroy();
-            }
+function toggleBadges() {
+  const showBadges = document.getElementById('badge-toggle').checked;
+  document.querySelector('.badges').style.display = showBadges ? 'flex' : 'none';
+}
 
-            imageToEdit.src = e.target.result;
-            modal.style.display = "flex";
+function saveChanges() {
+  const username = document.getElementById('username-input').value;
+  const tagline = document.getElementById('tagline-input').value;
+  const bio = document.getElementById('bio-input').value;
+  const primary = document.getElementById('primary-color').value;
+  const accent = document.getElementById('accent-color').value;
 
-            currentImageType = 'avatar';
-            initializeCropper(imageToEdit, 1);
-        };
-        reader.readAsDataURL(file);
-    }
-});
+  if (username) document.getElementById('display-username').innerText = username;
+  if (tagline) document.getElementById('display-tagline').innerText = tagline;
+  if (bio) document.getElementById('display-bio').innerHTML = bio.replace(/\n/g, "<br>");
 
-// Open the modal when the user uploads a banner
-bannerUpload.addEventListener("change", function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            if (cropper) {
-                cropper.destroy();
-            }
+  document.documentElement.style.setProperty('--primary-color', primary);
+  document.documentElement.style.setProperty('--accent-color', accent);
+  document.getElementById('pfp').style.borderColor = primary;
 
-            imageToEdit.src = e.target.result;
-            modal.style.display = "flex";
-
-            currentImageType = 'banner';
-            initializeCropper(imageToEdit, NaN, true);
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-// Close modal without saving changes
-closeModal.addEventListener("click", function() {
-    modal.style.display = "none";
-    if (cropper) cropper.destroy();
-});
-
-// Apply the changes and display the cropped image in the profile container
-applyChanges.addEventListener("click", function() {
-    if (cropper) {
-        const canvas = cropper.getCroppedCanvas();
-        const croppedImageUrl = canvas.toDataURL();
-
-        if (currentImageType === 'avatar') {
-            avatarContainer.style.backgroundImage = `url(${croppedImageUrl})`;
-        } else if (currentImageType === 'banner') {
-            bannerContainer.style.backgroundImage = `url(${croppedImageUrl})`;
-        }
-
-        modal.style.display = "none";
-        cropper.destroy();
-    }
-});
-
-// Listen to theme color changes and update the profile colors
-themeColorInput.addEventListener("input", function() {
-    const selectedColor = themeColorInput.value;
-    updateThemeColor(selectedColor);
-});
+  document.getElementById('edit-form').style.display = 'none';
+}
