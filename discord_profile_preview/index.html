@@ -1,52 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Picture and Banner Editor</title>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.js"></script>
-
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discord Profile Editor</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-    <h2>Discord Profile Preview</h2>
-    
-    <div class="profile-container">
-        <div class="banner" id="banner"></div>
-        <div class="avatar" id="avatar"></div>
-    </div>
-
-    <div class="upload-buttons">
-        <label class="custom-file-upload">
-            <input type="file" id="avatarUpload" accept="image/*"> 📷 Upload Profile Picture
-        </label>
-        
-        <label class="custom-file-upload">
-            <input type="file" id="bannerUpload" accept="image/*"> 🖼️ Upload Banner
-        </label>
-    </div>
-
-    <div>
-        <label for="themeColor">Theme Color:</label>
-        <input type="color" id="themeColor" value="#5865F2">
-    </div>
-
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <div class="modal-header">Adjust Your Image</div>
-            <div>
-                <img id="imageToEdit" style="max-width: 100%;" />
-            </div>
-            <div class="modal-footer">
-                <button class="apply-btn" id="applyChanges">Apply Changes</button>
-                <button class="close-btn" id="closeModal">Close</button>
-            </div>
+  <div class="profile-card">
+    <div class="banner" id="banner"></div>
+    <div class="pfp" id="pfp"></div>
+    <div class="status-tag">Made by Nummen</div>
+    <div class="content" id="content">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="username" id="display-username">j3naissante</div>
+        <div class="badges">
+          <img src="pictures/nitro.png" alt="badge" />
+          <img src="pictures/hype.png" alt="badge" />
+          <img src="pictures/dev.png" alt="badge" />
+          <img src="pictures/boost.png" alt="badge" />
+          <img src="pictures/quest.png" alt="badge" />
+          <img src="pictures/orbs.png" alt="badge" />
         </div>
-    </div>
+      </div>
+      <div class="tagline" id="display-tagline">j3naissante</div>
+      <div class="bio" id="display-bio">
+        <br>once you yunjin you can’t yunjout
+      </div>
+      <button class="edit-button" onclick="toggleEdit()">✏️ Edit Profile</button>
 
-    <script src="scripts.js"></script>
+      <div class="edit-form" id="edit-form">
+        <label>Upload Profile Picture</label>
+        <input type="file" accept="image/*" onchange="updateImage(event, 'pfp')" />
+        <label>Upload Banner</label>
+        <input type="file" accept="image/*" onchange="updateImage(event, 'banner')" />
+        <input type="text" placeholder="Username" id="username-input" />
+        <input type="text" placeholder="Tagline" id="tagline-input" />
+        <input type="text" placeholder="Bio" id="bio-input" />
+        <div class="theme-colors">
+          <label>Primary:</label>
+          <input type="color" id="primary-color" value="#1e1f22" />
+          <label>Accent:</label>
+          <input type="color" id="accent-color" value="#5865F2" />
+        </div>
+        <div class="theme-colors">
+          <label>Show Badges:</label>
+          <label class="switch">
+            <input type="checkbox" id="badge-toggle" checked onchange="toggleBadges()" />
+            <span class="slider"></span>
+          </label>
+        </div>
+        <button class="edit-button" onclick="saveChanges()">✅ Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
